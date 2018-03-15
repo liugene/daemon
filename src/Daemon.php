@@ -5,19 +5,35 @@ namespace linkphp\process;
 class Daemon
 {
 
-    private $pid_file;
+    /**
+     * pid文件
+     * @var string $pid_file
+     */
+    private $pid_file_path;
 
-    private $pid;
+    /**
+     * 做大进程数
+     * @var integer $process_max_num
+     */
+    private $process_max_num;
 
-    private $process_num;
+    /**
+     * 当前进程数
+     * @var integer $process_num
+     */
+    private $process_num = 0;
 
     public function setProcessNum($number)
     {
-        $this->process_num = $number;
+        $this->process_max_num = $number;
         return $this;
     }
 
-    public function setPidFile(){}
+    public function setPidFilePath($path)
+    {
+        $this->pid_file_path = $path;
+        return $this;
+    }
 
     public function setWork(){}
 
@@ -30,16 +46,20 @@ class Daemon
 
     private function daemon()
     {
-        $pid = pcntl_fork();
+        if($this->process_num<$this->process_max_num){
+            $pid = pcntl_fork();
+        }
         if($pid == 0){
             /**
              * 这是子进程
              */
         } else if($pid > 0) {
+            exit(0);
         } else {
             /**
              * 创建失败
              */
+            die('failed');
         }
     }
 

@@ -2,4 +2,4 @@
 
 namespace linkphp\process;
 
-class Process{}
+class Pipe{}

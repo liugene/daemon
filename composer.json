@@ -2,7 +2,11 @@
   "name": "linkphp/process",
   "type": "library",
   "description": "php error",
+<<<<<<< HEAD
   "keywords": ["process","php process 进程管理"],
+=======
+  "keywords": ["process","php process"],
+>>>>>>> f567dbbfa58a8be7b749aaaf36cc8a71edd76bfd
   "authors": [
     {
       "name": "liugene",
