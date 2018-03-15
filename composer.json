@@ -1,8 +1,8 @@
 {
-  "name": "linkphp/daemon",
+  "name": "linkphp/process",
   "type": "library",
   "description": "php error",
-  "keywords": ["daemon","php daemon 守护进程"],
+  "keywords": ["process","php process 进程管理"],
   "authors": [
     {
       "name": "liugene",
@@ -14,7 +14,7 @@
   },
   "autoload": {
     "psr-4": {
-      "linkphp\\daemon\\": "src"
+      "linkphp\\process\\": "src"
     }
   }
 }
