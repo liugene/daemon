@@ -55,9 +55,17 @@ abstract class Process
 
     abstract public static function getMasterPid($pidFile);
 
+    abstract public static function setName($name);
+
     public function setPidFilePath($path)
     {
         self::$pid_file_path = $path;
+        return $this;
+    }
+
+    public function setProcessMaxNum($num)
+    {
+        $this->process_max_num = $num;
         return $this;
     }
 
@@ -65,14 +73,19 @@ abstract class Process
     public function writePid($pidFile)
     {
         $pid  = $this->getPid();
+        $dir = dirname(self::$pid_file_path);
+        if (!is_dir($dir)) {
+            mkdir($dir, 0755, true);
+        }
         $file = fopen($pidFile, "w+");
         if (flock($file, LOCK_EX)) {
             fwrite($file, $pid);
             flock($file, LOCK_UN);
         } else {
-            die("Error writing file '{$pidFile}'" . PHP_EOL);
+            return false;
         }
         fclose($file);
+        return true;
     }
 
     public function help(){}

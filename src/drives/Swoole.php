@@ -15,25 +15,26 @@ class Swoole extends Process
 
     public function start($callback)
     {
-//        for($i=0;$i<$this->process_max_num; ++$i){
-//            $process = new swoole_process($callback);
-//            $pid = $process->start();
-//            $this->process_max_num++;
-//            self::$pids[$pid] = $process;
-//            $this->writePid(static::$pid_file_path);
+        for($i=0;$i<$this->process_max_num; ++$i){
+            $process = new swoole_process($callback);
+            $pid = $process->start();
+            $this->process_max_num++;
+            self::$pids[$pid] = $process;
+            $this->writePid(static::$pid_file_path);
+        }
+//        $process = new swoole_process($callback);
+//        $pid = $process->start();
+//        if(!$this->writePid(static::$pid_file_path)){
+//            $this->stop();
 //        }
-        $process = new swoole_process($callback);
-        $pid = $process->start();
-        $this->process_max_num++;
-        self::$pids[$pid] = $process;
-        $this->writePid(static::$pid_file_path);
+//        $this->process_max_num++;
+//        self::$pids[$pid] = $process;
 
         while(1){
             $ret = $this->wait();
             if ($ret){// $ret 是个数组 code是进程退出状态码，
                 $pid = $ret['pid'];
                 dump(self::$pids);
-                dump(Application::getContainerInstance());
                 unset(self::$pids[$pid]);
                 $this->process_max_num--;
                 echo PHP_EOL."Worker Exit, PID=" . $pid . PHP_EOL;
@@ -82,7 +83,7 @@ class Swoole extends Process
 
     public function daemon()
     {
-        $this->daemon->setPidFilePath($this->pid_file_path);
+        $this->daemon->setPidFilePath(self::$pid_file_path);
     }
 
     public function getPid()
@@ -107,6 +108,19 @@ class Swoole extends Process
     public static function isRunning($pid)
     {
         return self::kill($pid, 0);
+    }
+
+    // 设置进程名称
+    public static function setName($name)
+    {
+        if (stristr(PHP_OS, 'DAR')) {
+            return;
+        }
+        if (function_exists('cli_set_process_title')) {
+            cli_set_process_title($name);
+        } else if (function_exists('swoole_set_process_name')) {
+            swoole_set_process_name($name);
+        }
     }
 
 }
