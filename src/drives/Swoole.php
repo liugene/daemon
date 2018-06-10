@@ -4,7 +4,7 @@ namespace linkphp\process\drives;
 
 use linkphp\process\Process;
 use swoole_process;
-use linkphp\Application;
+use framework\Application;
 
 class Swoole extends Process
 {
